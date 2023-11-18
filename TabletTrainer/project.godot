@@ -11,7 +11,9 @@ config_version=5
 [application]
 
 config/name="Tablet Trainer"
+config/version="0.1"
 config/tags=PackedStringArray("2d", "program")
+run/main_scene="res://scenes/main/main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
