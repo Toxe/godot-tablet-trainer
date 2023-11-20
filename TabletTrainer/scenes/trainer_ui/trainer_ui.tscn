@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://d1e5t3605hrpa"]
+
+[ext_resource type="Script" path="res://scenes/trainer_ui/trainer_ui.gd" id="1_1327e"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_2dycw"]
+action = &"quit"
+
+[sub_resource type="Shortcut" id="Shortcut_fapr2"]
+events = [SubResource("InputEventAction_2dycw")]
+
+[node name="TrainerUI" type="CanvasLayer"]
+script = ExtResource("1_1327e")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/separation = 40
+
+[node name="QuitButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+shortcut = SubResource("Shortcut_fapr2")
+text = "[ESC] Back to Main Menu"
+
+[node name="TimeLabel" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Time: --"
+
+[connection signal="pressed" from="HBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

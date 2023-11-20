@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://kmkam625oih7"]
+
+[ext_resource type="Script" path="res://scenes/line_trainer/line_trainer.gd" id="1_lp83l"]
+[ext_resource type="PackedScene" uid="uid://d1e5t3605hrpa" path="res://scenes/trainer_ui/trainer_ui.tscn" id="2_7glub"]
+[ext_resource type="PackedScene" uid="uid://r6egmegqdfch" path="res://scenes/drawing/drawing.tscn" id="2_eeytx"]
+
+[node name="LineTrainer" type="Node2D"]
+script = ExtResource("1_lp83l")
+
+[node name="Drawing" parent="." instance=ExtResource("2_eeytx")]
+
+[node name="TrainerUI" parent="." instance=ExtResource("2_7glub")]
+
+[node name="TargetLine" type="Line2D" parent="."]
+width = 15.0
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
+[connection signal="started" from="Drawing" to="." method="_on_drawing_started"]
+[connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
+[connection signal="stopped" from="Drawing" to="." method="_on_drawing_stopped"]
+[connection signal="stopped" from="Drawing" to="TrainerUI" method="_on_drawing_stopped"]

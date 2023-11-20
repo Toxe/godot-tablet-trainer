@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://bm6pa0huhw5kg"]
+
+[ext_resource type="Script" path="res://scenes/circle_trainer/circle_trainer.gd" id="1_52hda"]
+[ext_resource type="PackedScene" uid="uid://d1e5t3605hrpa" path="res://scenes/trainer_ui/trainer_ui.tscn" id="2_bhn12"]
+[ext_resource type="PackedScene" uid="uid://r6egmegqdfch" path="res://scenes/drawing/drawing.tscn" id="2_kl7y5"]
+
+[node name="CircleTrainer" type="Node2D"]
+script = ExtResource("1_52hda")
+
+[node name="Drawing" parent="." instance=ExtResource("2_kl7y5")]
+z_index = 1
+
+[node name="TrainerUI" parent="." instance=ExtResource("2_bhn12")]
+
+[connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
+[connection signal="started" from="Drawing" to="." method="_on_drawing_started"]
+[connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
+[connection signal="stopped" from="Drawing" to="." method="_on_drawing_stopped"]
+[connection signal="stopped" from="Drawing" to="TrainerUI" method="_on_drawing_stopped"]

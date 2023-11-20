@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcn08c1j2eig5"]
+
+[ext_resource type="Script" path="res://scenes/main_menu/main_menu.gd" id="1_h665t"]
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_h665t")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -29.5
+offset_top = -33.0
+offset_right = 29.5
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LinesButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Lines"
+
+[node name="CirclesButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Circles"
+
+[connection signal="pressed" from="VBoxContainer/LinesButton" to="." method="_on_lines_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/CirclesButton" to="." method="_on_circles_button_pressed"]
