@@ -5,7 +5,7 @@ signal stopped()
 signal point_added(point: Vector2)
 
 var is_drawing := false
-var drawing_line: Line2D = null
+var line: Line2D = null
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -26,13 +26,13 @@ func start_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
 
     is_drawing = true
 
-    if drawing_line:
-        drawing_line.queue_free()
+    if line:
+        line.queue_free()
 
-    drawing_line = Line2D.new()
-    drawing_line.width = 5
-    drawing_line.default_color = Color.BLACK
-    add_child(drawing_line)
+    line = Line2D.new()
+    line.width = 5
+    line.default_color = Color.BLACK
+    add_child(line)
 
     started.emit()
 
@@ -41,7 +41,7 @@ func start_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
 
 func stop_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
     assert(is_drawing)
-    assert(drawing_line != null)
+    assert(line != null)
 
     if not mouse_motion_event.relative.is_zero_approx():
         add_point(mouse_motion_event.position)
@@ -53,8 +53,8 @@ func stop_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
 
 func add_point(point: Vector2) -> void:
     assert(is_drawing)
-    assert(drawing_line != null)
+    assert(line != null)
 
-    drawing_line.add_point(point)
+    line.add_point(point)
 
     point_added.emit(point)
