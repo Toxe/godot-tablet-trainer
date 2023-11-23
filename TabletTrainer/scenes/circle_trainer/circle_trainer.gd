@@ -38,13 +38,13 @@ func _draw() -> void:
     draw_arc(target_circle_position, target_circle_radius, 0.0, 2.0 * PI, 128, Color.WHITE, target_circle_line_width)
 
 
-func _on_drawing_started() -> void:
+func _on_drawing_started(_point: Vector2) -> void:
     for child in get_children():
         if child is Line2D:
             child.queue_free()
 
 
-func _on_drawing_stopped() -> void:
+func _on_drawing_stopped(_point: Vector2) -> void:
     create_new_target_circle()
 
 

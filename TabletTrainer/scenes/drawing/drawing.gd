@@ -1,8 +1,9 @@
 class_name Drawing extends Node2D
 
-signal started()
-signal stopped()
+signal started(point: Vector2)
+signal stopped(point: Vector2)
 signal point_added(point: Vector2)
+signal line_drawn(start_point: Vector2, end_point: Vector2)
 
 var is_drawing := false
 var line: Line2D = null
@@ -34,7 +35,7 @@ func start_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
     line.default_color = Color.BLACK
     add_child(line)
 
-    started.emit()
+    started.emit(mouse_motion_event.position)
 
     add_point(mouse_motion_event.position)
 
@@ -48,7 +49,7 @@ func stop_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
 
     is_drawing = false
 
-    stopped.emit()
+    stopped.emit(mouse_motion_event.position)
 
 
 func add_point(point: Vector2) -> void:
@@ -58,3 +59,6 @@ func add_point(point: Vector2) -> void:
     line.add_point(point)
 
     point_added.emit(point)
+
+    if line.get_point_count() > 1:
+        line_drawn.emit(line.points[-2], point)

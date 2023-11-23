@@ -30,11 +30,11 @@ func _on_quit_button_pressed() -> void:
     get_tree().change_scene_to_packed(load("res://scenes/main_menu/main_menu.tscn"))
 
 
-func _on_drawing_started() -> void:
+func _on_drawing_started(_point: Vector2) -> void:
     is_drawing = true
     update_start_time()
 
 
-func _on_drawing_stopped() -> void:
+func _on_drawing_stopped(_point: Vector2) -> void:
     is_drawing = false
     update_end_time()

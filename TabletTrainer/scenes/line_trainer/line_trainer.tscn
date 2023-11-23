@@ -1,21 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://kmkam625oih7"]
+[gd_scene load_steps=5 format=3 uid="uid://kmkam625oih7"]
 
 [ext_resource type="Script" path="res://scenes/line_trainer/line_trainer.gd" id="1_lp83l"]
 [ext_resource type="PackedScene" uid="uid://d1e5t3605hrpa" path="res://scenes/trainer_ui/trainer_ui.tscn" id="2_7glub"]
 [ext_resource type="PackedScene" uid="uid://r6egmegqdfch" path="res://scenes/drawing/drawing.tscn" id="2_eeytx"]
 
+[sub_resource type="Gradient" id="Gradient_2ffaq"]
+colors = PackedColorArray(0.513233, 0.513233, 0.513233, 1, 1, 1, 1, 1)
+
 [node name="LineTrainer" type="Node2D"]
 script = ExtResource("1_lp83l")
 
 [node name="Drawing" parent="." instance=ExtResource("2_eeytx")]
+z_index = 1
 
 [node name="TrainerUI" parent="." instance=ExtResource("2_7glub")]
 
 [node name="TargetLine" type="Line2D" parent="."]
 width = 15.0
+gradient = SubResource("Gradient_2ffaq")
 begin_cap_mode = 2
 end_cap_mode = 2
 
+[node name="OldTargetLine" type="Line2D" parent="."]
+z_index = -1
+width = 15.0
+default_color = Color(0.368627, 0.368627, 0.368627, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="InfoLabel" type="Label" parent="."]
+offset_left = 49.0
+offset_top = 72.0
+offset_right = 105.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 30
+text = "info"
+
+[connection signal="line_drawn" from="Drawing" to="." method="_on_drawing_line_drawn"]
 [connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
 [connection signal="started" from="Drawing" to="." method="_on_drawing_started"]
 [connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
