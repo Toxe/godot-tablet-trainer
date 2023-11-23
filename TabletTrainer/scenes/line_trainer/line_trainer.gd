@@ -30,6 +30,11 @@ func _ready() -> void:
     update_info_label()
 
 
+func _draw() -> void:
+    for p in projected_line_points:
+        draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
+
+
 func create_new_target_line() -> void:
     var window_size := get_window().size
     var margin: float = min(window_size.x, window_size.y) * margin_screen_ratio
@@ -264,8 +269,3 @@ func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
     queue_redraw()
 
     update_info_label()
-
-
-func _draw() -> void:
-    for p in projected_line_points:
-        draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
