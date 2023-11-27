@@ -12,6 +12,15 @@ z_index = 1
 
 [node name="TrainerUI" parent="." instance=ExtResource("2_bhn12")]
 
+[node name="InfoLabel" type="Label" parent="."]
+offset_left = 49.0
+offset_top = 72.0
+offset_right = 105.0
+offset_bottom = 114.0
+theme_override_font_sizes/font_size = 30
+text = "info"
+
+[connection signal="line_drawn" from="Drawing" to="." method="_on_drawing_line_drawn"]
 [connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
 [connection signal="started" from="Drawing" to="." method="_on_drawing_started"]
 [connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
