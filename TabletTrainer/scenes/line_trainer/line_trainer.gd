@@ -4,8 +4,8 @@ const margin_screen_ratio := 0.1
 const target_line_width := 15
 const target_line_min_length_screen_ratio := 0.2
 
-var info_points_count := 0
-var info_points_distance := 0.0
+var info_count_points := 0
+var info_sum_distance_to_target := 0.0
 var info_drawing_length := 0.0
 var info_line_coverage_points_inside := 0
 var info_line_coverage_points_outside := 0
@@ -59,8 +59,8 @@ func create_new_target_line() -> void:
 
 
 func reset_info_stats() -> void:
-    info_points_count = 0
-    info_points_distance = 0.0
+    info_count_points = 0
+    info_sum_distance_to_target = 0.0
     info_drawing_length = 0.0
     info_line_coverage_points_inside = 0
     info_line_coverage_points_outside = 0
@@ -69,15 +69,18 @@ func reset_info_stats() -> void:
 
 
 func update_info_label() -> void:
+    var average_distance_to_target := (info_sum_distance_to_target / info_count_points) if info_count_points > 0 else 0.0
     var target_line_length := target_line.points[0].distance_to(target_line.points[1])
+    var covered_target_length_ratio_inside := (info_covered_length_inside / target_line_length) if info_count_points > 0 else 0.0
+    var covered_target_length_ratio_outside := (info_covered_length_outside / target_line_length) if info_count_points > 0 else 0.0
 
-    info_label.text = "points: %d, distance: %d, average: %0.2f\ntarget line length: %d\ndrawing length: %d, drawing : target = %.03f\nline coverage: %d points inside, %d points outside\ncovered length: %d inside + %d outside = %d\ncovered length, inside : target = %0.3f, outside : target = %0.3f" % [
-        info_points_count, info_points_distance, (info_points_distance / info_points_count) if info_points_count > 0 else 0.0,
+    info_label.text = "points: %d, sum distance to target line: %d, average distance: %0.2f\ntarget line length: %d\ndrawing length: %d, drawing length : target line length = %.03f\nline coverage: %d points inside, %d points outside\ncovered target length: %d inside + %d outside = %d\ncovered target length, inside : target = %0.3f, outside : target = %0.3f" % [
+        info_count_points, info_sum_distance_to_target, average_distance_to_target,
         target_line_length,
         info_drawing_length, info_drawing_length / target_line_length,
         info_line_coverage_points_inside, info_line_coverage_points_outside,
         info_covered_length_inside, info_covered_length_outside, info_covered_length_inside + info_covered_length_outside,
-        (info_covered_length_inside / target_line_length) if info_points_count > 0 else 0.0, (info_covered_length_outside / target_line_length) if info_points_count > 0 else 0.0
+        covered_target_length_ratio_inside, covered_target_length_ratio_outside
     ]
 
 
@@ -199,9 +202,8 @@ func _on_drawing_point_added(point: Vector2) -> void:
     var point_on_line := project_point_onto_line(point, target_line)
     var distance_point_to_target_line := point.distance_to(point_on_line)
 
-    info_points_count += 1
-    info_points_distance += distance_point_to_target_line
-    info_drawing_length += 1.0
+    info_count_points += 1
+    info_sum_distance_to_target += distance_point_to_target_line
 
     if point_inside_line(point_on_line, target_line):
         info_line_coverage_points_inside += 1
