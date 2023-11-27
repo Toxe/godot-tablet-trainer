@@ -17,6 +17,10 @@ run/main_scene="res://scenes/main_menu/main_menu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+MainWindow="*res://autoload/main_window.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=1
