@@ -29,10 +29,14 @@ begin_cap_mode = 2
 end_cap_mode = 2
 
 [node name="InfoLabel" type="Label" parent="."]
+z_index = 2
 offset_left = 49.0
 offset_top = 72.0
 offset_right = 105.0
 offset_bottom = 114.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 30
 text = "info"
 
