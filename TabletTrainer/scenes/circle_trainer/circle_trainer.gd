@@ -1,6 +1,6 @@
 extends Node2D
 
-const margin_screen_ratio := 0.1
+const margin_screen_ratio := 0.2
 const target_circle_line_width := 15
 const target_circle_min_radius_screen_ratio := 0.1
 const target_circle_max_radius_screen_ratio := 0.3
