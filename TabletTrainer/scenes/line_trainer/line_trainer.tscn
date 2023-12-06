@@ -44,3 +44,4 @@ metadata/_edit_use_anchors_ = true
 [connection signal="stopped" from="Drawing" to="." method="_on_drawing_stopped"]
 [connection signal="stopped" from="Drawing" to="TrainerUI" method="_on_drawing_stopped"]
 [connection signal="toggle_debug_info" from="TrainerUI" to="." method="_on_trainer_ui_toggle_debug_info"]
+[connection signal="toggle_stats" from="TrainerUI" to="." method="_on_trainer_ui_toggle_stats"]

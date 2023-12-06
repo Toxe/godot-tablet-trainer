@@ -1,9 +1,11 @@
 class_name TrainerUI extends CanvasLayer
 
 signal toggle_debug_info(should_show_debug_info: bool)
+signal toggle_stats(should_show_stats: bool)
 
 var is_drawing := false
 var show_debug_info := false
+var show_stats := true
 
 var start_time := 0.0
 var end_time := 0.0
@@ -37,6 +39,11 @@ func _on_quit_button_pressed() -> void:
 func _on_toggle_debug_info_button_pressed() -> void:
     show_debug_info = !show_debug_info
     toggle_debug_info.emit(show_debug_info)
+
+
+func _on_toggle_stats_button_pressed() -> void:
+    show_stats = !show_stats
+    toggle_stats.emit(show_stats)
 
 
 func _on_drawing_started(_point: Vector2) -> void:

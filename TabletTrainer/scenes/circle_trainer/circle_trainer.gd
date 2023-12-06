@@ -267,3 +267,7 @@ func _on_trainer_ui_toggle_debug_info(should_show_debug_info: bool) -> void:
     if debug_lines:
         debug_lines.visible = show_debug_info
     queue_redraw()
+
+
+func _on_trainer_ui_toggle_stats(should_show_stats: bool) -> void:
+    info_label.visible = should_show_stats

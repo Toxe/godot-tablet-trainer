@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://d1e5t3605hrpa"]
+[gd_scene load_steps=8 format=3 uid="uid://d1e5t3605hrpa"]
 
 [ext_resource type="Script" path="res://scenes/trainer_ui/trainer_ui.gd" id="1_1327e"]
 
@@ -13,6 +13,12 @@ action = &"toggle_debug_info"
 
 [sub_resource type="Shortcut" id="Shortcut_oh2r6"]
 events = [SubResource("InputEventAction_u6wat")]
+
+[sub_resource type="InputEventAction" id="InputEventAction_a8adi"]
+action = &"toggle_stats"
+
+[sub_resource type="Shortcut" id="Shortcut_ert2l"]
+events = [SubResource("InputEventAction_a8adi")]
 
 [node name="TrainerUI" type="CanvasLayer"]
 script = ExtResource("1_1327e")
@@ -33,6 +39,12 @@ size_flags_horizontal = 0
 shortcut = SubResource("Shortcut_oh2r6")
 text = "[D] Toggle debug info"
 
+[node name="ToggleStatsButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+shortcut = SubResource("Shortcut_ert2l")
+text = "[S] Toggle stats"
+
 [node name="TimeLabel" type="Label" parent="."]
 offset_left = 238.0
 offset_top = 21.0
@@ -42,3 +54,4 @@ text = "Time: --"
 
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/ToggleDebugInfoButton" to="." method="_on_toggle_debug_info_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ToggleStatsButton" to="." method="_on_toggle_stats_button_pressed"]
