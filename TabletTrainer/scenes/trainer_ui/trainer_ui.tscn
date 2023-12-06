@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://d1e5t3605hrpa"]
+[gd_scene load_steps=6 format=3 uid="uid://d1e5t3605hrpa"]
 
 [ext_resource type="Script" path="res://scenes/trainer_ui/trainer_ui.gd" id="1_1327e"]
 
@@ -8,21 +8,37 @@ action = &"quit"
 [sub_resource type="Shortcut" id="Shortcut_fapr2"]
 events = [SubResource("InputEventAction_2dycw")]
 
+[sub_resource type="InputEventAction" id="InputEventAction_u6wat"]
+action = &"toggle_debug_info"
+
+[sub_resource type="Shortcut" id="Shortcut_oh2r6"]
+events = [SubResource("InputEventAction_u6wat")]
+
 [node name="TrainerUI" type="CanvasLayer"]
 script = ExtResource("1_1327e")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
-theme_override_constants/separation = 40
 
-[node name="QuitButton" type="Button" parent="HBoxContainer"]
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
 shortcut = SubResource("Shortcut_fapr2")
 text = "[ESC] Back to Main Menu"
 
-[node name="TimeLabel" type="Label" parent="HBoxContainer"]
+[node name="ToggleDebugInfoButton" type="Button" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 0
+shortcut = SubResource("Shortcut_oh2r6")
+text = "[D] Toggle debug info"
+
+[node name="TimeLabel" type="Label" parent="."]
+offset_left = 238.0
+offset_top = 21.0
+offset_right = 295.0
+offset_bottom = 44.0
 text = "Time: --"
 
-[connection signal="pressed" from="HBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/ToggleDebugInfoButton" to="." method="_on_toggle_debug_info_button_pressed"]

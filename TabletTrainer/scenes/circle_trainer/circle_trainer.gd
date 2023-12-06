@@ -22,6 +22,7 @@ var info_drawing_arc_position := Vector2.ZERO
 var info_drawing_arc_first_point := Vector2.ZERO
 var info_drawing_arc_last_point := Vector2.ZERO
 
+var show_debug_info := false
 var debug_lines: Node2D = null
 var last_debug_line: Line2D = null
 var last_debug_label: Label = null
@@ -43,17 +44,18 @@ func _draw() -> void:
     draw_arc(old_target_circle_position, old_target_circle_radius, 0.0, 2.0 * PI, 128, Color(0.4, 0.4, 0.4), target_circle_line_width)
     draw_arc(target_circle_position, target_circle_radius, 0.0, 2.0 * PI, 128, Color.WHITE, target_circle_line_width)
 
-    for p in projected_circle_points:
-        draw_arc(p, 5, 0, 2.0 * PI, 8, Color.BLUE)
+    if show_debug_info:
+        for p in projected_circle_points:
+            draw_arc(p, 5, 0, 2.0 * PI, 8, Color.BLUE)
 
-    if info_drawing_arc_direction != "--":
-        var start_angle := info_drawing_arc_position.angle_to_point(info_drawing_arc_first_point)
-        var end_angle := start_angle + info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == "CW" else -2.0)
+        if info_drawing_arc_direction != "--":
+            var start_angle := info_drawing_arc_position.angle_to_point(info_drawing_arc_first_point)
+            var end_angle := start_angle + info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == "CW" else -2.0)
 
-        draw_arc(info_drawing_arc_position, info_drawing_arc_radius, start_angle, end_angle, 128, Color.BLUE, target_circle_line_width)
+            draw_arc(info_drawing_arc_position, info_drawing_arc_radius, start_angle, end_angle, 128, Color.BLUE, target_circle_line_width)
 
-        draw_line(info_drawing_arc_position, info_drawing_arc_first_point, Color.DARK_GREEN, 2)
-        draw_line(info_drawing_arc_position, info_drawing_arc_last_point, Color.GREEN, 2)
+            draw_line(info_drawing_arc_position, info_drawing_arc_first_point, Color.DARK_GREEN, 2)
+            draw_line(info_drawing_arc_position, info_drawing_arc_last_point, Color.GREEN, 2)
 
 
 func create_new_target_circle() -> void:
@@ -112,6 +114,7 @@ func add_debug_line(point: Vector2) -> Line2D:
     if debug_lines == null:
         debug_lines = Node2D.new()
         debug_lines.name = "debug_lines"
+        debug_lines.visible = show_debug_info
         add_child(debug_lines)
 
     var line := Line2D.new()
@@ -256,4 +259,11 @@ func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
                 info_drawing_arc_angle = absolute_arc_angle
                 info_drawing_arc_length = target_circle_circumference * (absf(info_drawing_arc_angle) + info_drawing_arc_revolutions * 2.0 * PI) / (2.0 * PI)
 
+    queue_redraw()
+
+
+func _on_trainer_ui_toggle_debug_info(should_show_debug_info: bool) -> void:
+    show_debug_info = should_show_debug_info
+    if debug_lines:
+        debug_lines.visible = show_debug_info
     queue_redraw()

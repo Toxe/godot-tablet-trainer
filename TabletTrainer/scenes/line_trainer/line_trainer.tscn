@@ -35,6 +35,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 30
 text = "info"
+metadata/_edit_use_anchors_ = true
 
 [connection signal="line_drawn" from="Drawing" to="." method="_on_drawing_line_drawn"]
 [connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
@@ -42,3 +43,4 @@ text = "info"
 [connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
 [connection signal="stopped" from="Drawing" to="." method="_on_drawing_stopped"]
 [connection signal="stopped" from="Drawing" to="TrainerUI" method="_on_drawing_stopped"]
+[connection signal="toggle_debug_info" from="TrainerUI" to="." method="_on_trainer_ui_toggle_debug_info"]

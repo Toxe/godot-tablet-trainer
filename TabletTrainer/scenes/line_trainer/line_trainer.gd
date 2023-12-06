@@ -12,6 +12,7 @@ var info_line_coverage_points_outside := 0
 var info_covered_length_inside := 0.0
 var info_covered_length_outside := 0.0
 
+var show_debug_info := false
 var debug_lines: Node2D = null
 var last_debug_line: Line2D = null
 var projected_line_points: Array[Dictionary] = []
@@ -31,8 +32,9 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-    for p in projected_line_points:
-        draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
+    if show_debug_info:
+        for p in projected_line_points:
+            draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
 
 
 func create_new_target_line() -> void:
@@ -93,6 +95,7 @@ func add_debug_line(point: Vector2) -> Line2D:
     if debug_lines == null:
         debug_lines = Node2D.new()
         debug_lines.name = "debug_lines"
+        debug_lines.visible = show_debug_info
         add_child(debug_lines)
 
     var line := Line2D.new()
@@ -271,3 +274,10 @@ func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
     queue_redraw()
 
     update_info_label()
+
+
+func _on_trainer_ui_toggle_debug_info(should_show_debug_info: bool) -> void:
+    show_debug_info = should_show_debug_info
+    if debug_lines:
+        debug_lines.visible = show_debug_info
+    queue_redraw()
