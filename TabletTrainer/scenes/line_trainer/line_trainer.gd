@@ -34,6 +34,25 @@ func _ready() -> void:
 
 func _draw() -> void:
     if show_debug_info:
+        const debug_line_width := 10
+        const dark_gray := Color(0.25, 0.25, 0.25)
+
+        # draw workspace rect
+        var workspace := get_workspace()
+
+        draw_rect(workspace, dark_gray, false, debug_line_width)
+
+        # draw min and max target line lengths
+        var margin := get_workspace_margin()
+        var workspace_center := workspace.get_center()
+        var min_line_length: float = get_min_line_length()
+        var max_line_length: float = get_max_line_length()
+        var min_max_lines_center_y := workspace.end.y + margin / 2.0
+
+        draw_line(Vector2(workspace_center.x - min_line_length / 2.0, min_max_lines_center_y - 15), Vector2(workspace_center.x + min_line_length / 2.0, min_max_lines_center_y - 15), dark_gray, debug_line_width)
+        draw_line(Vector2(workspace_center.x - max_line_length / 2.0, min_max_lines_center_y + 15), Vector2(workspace_center.x + max_line_length / 2.0, min_max_lines_center_y + 15), dark_gray, debug_line_width)
+
+        # projected points on target line
         for p in projected_line_points:
             draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
 
