@@ -2,7 +2,8 @@ extends Node2D
 
 const margin_screen_ratio := 0.15
 const target_line_width := 15
-const target_line_min_length_screen_ratio := 0.2
+const target_line_min_length_workspace_ratio := 0.5
+const target_line_max_length_workspace_ratio := 2.0
 
 var info_count_points := 0
 var info_sum_distance_to_target := 0.0
@@ -37,23 +38,38 @@ func _draw() -> void:
             draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
 
 
-func create_new_target_line() -> void:
+func get_workspace_margin() -> float:
     var window_size := get_window().size
-    var margin: float = min(window_size.x, window_size.y) * margin_screen_ratio
-    var min_line_length: float = min(window_size.x, window_size.y) * target_line_min_length_screen_ratio
+    return mini(window_size.x, window_size.y) * margin_screen_ratio
 
-    var x_min := margin
-    var y_min := margin
-    var x_max := window_size.x - margin
-    var y_max := window_size.y - margin
 
-    var p0 := Vector2(randf_range(x_min, x_max), randf_range(y_min, y_max))
-    var p1 := Vector2.ZERO
+func get_workspace() -> Rect2:
+    var window_size := get_window().size
+    var margin := get_workspace_margin()
+    return Rect2(margin, margin, window_size.x - 2 * margin, window_size.y - 2 * margin)
 
-    while true:
-        p1 = Vector2(randf_range(x_min, x_max), randf_range(y_min, y_max))
-        if p0.distance_to(p1) >= min_line_length:
-            break
+
+func get_min_line_length() -> float:
+    var rect := get_workspace()
+    return min(rect.size.x, rect.size.y) * target_line_min_length_workspace_ratio
+
+
+func get_max_line_length() -> float:
+    var rect := get_workspace()
+    return min(rect.size.x, rect.size.y) * target_line_max_length_workspace_ratio
+
+
+func create_new_target_line() -> void:
+    var workspace := get_workspace()
+    var min_line_length: float = get_min_line_length()
+    var max_line_length: float = get_max_line_length()
+
+    var calc_random_point_in_workspace := func() -> Vector2: return Vector2(randf_range(workspace.position.x, workspace.end.x), randf_range(workspace.position.y, workspace.end.y))
+    var p0 := calc_random_point_in_workspace.call() as Vector2
+    var p1 := calc_random_point_in_workspace.call() as Vector2
+
+    while p0.distance_to(p1) < min_line_length or p0.distance_to(p1) > max_line_length:
+        p1 = calc_random_point_in_workspace.call()
 
     target_line.clear_points()
     target_line.add_point(p0)
