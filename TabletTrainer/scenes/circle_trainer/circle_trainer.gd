@@ -58,18 +58,37 @@ func _draw() -> void:
             draw_line(info_drawing_arc_position, info_drawing_arc_last_point, Color.GREEN, 2)
 
 
-func create_new_target_circle() -> void:
+func get_workspace_margin() -> float:
     var window_size := get_window().size
-    var margin: float = min(window_size.x, window_size.y) * margin_screen_ratio
+    return mini(window_size.x, window_size.y) * margin_screen_ratio
 
-    var min_radius: float = min(window_size.x, window_size.y) * target_circle_min_radius_screen_ratio
-    var max_radius: float = min(window_size.x, window_size.y) * target_circle_max_radius_screen_ratio
-    target_circle_radius = randf_range(min_radius, max_radius)
+
+func get_workspace() -> Rect2:
+    var window_size := get_window().size
+    var margin := get_workspace_margin()
+    return Rect2(margin, margin, window_size.x - 2 * margin, window_size.y - 2 * margin)
+
+
+func get_min_circle_radius() -> float:
+    var rect := get_workspace()
+    return minf(rect.size.x, rect.size.y) * target_circle_min_radius_screen_ratio
+
+
+func get_max_circle_radius() -> float:
+    var rect := get_workspace()
+    return minf(rect.size.x, rect.size.y) * target_circle_max_radius_screen_ratio
+
+
+func create_new_target_circle() -> void:
+    var workspace := get_workspace()
+    var margin := get_workspace_margin()
+
+    target_circle_radius = randf_range(get_min_circle_radius(), get_max_circle_radius())
 
     var x_min := margin + target_circle_radius
     var y_min := margin + target_circle_radius
-    var x_max := window_size.x - (margin + target_circle_radius)
-    var y_max := window_size.y - (margin + target_circle_radius)
+    var x_max := workspace.end.x - target_circle_radius
+    var y_max := workspace.end.y - target_circle_radius
 
     target_circle_position = Vector2(randf_range(x_min, x_max), randf_range(y_min, y_max))
 
