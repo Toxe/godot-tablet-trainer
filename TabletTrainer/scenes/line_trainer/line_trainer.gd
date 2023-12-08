@@ -36,17 +36,16 @@ func _draw() -> void:
     if show_debug_info:
         const debug_line_width := 10
         const dark_gray := Color(0.25, 0.25, 0.25)
-
-        # draw workspace rect
         var workspace := get_workspace()
 
+        # draw workspace rect
         draw_rect(workspace, dark_gray, false, debug_line_width)
 
         # draw min and max target line lengths
         var margin := get_workspace_margin()
         var workspace_center := workspace.get_center()
-        var min_line_length: float = get_min_line_length()
-        var max_line_length: float = get_max_line_length()
+        var min_line_length := get_min_line_length()
+        var max_line_length := get_max_line_length()
         var min_max_lines_center_y := workspace.end.y + margin / 2.0
 
         draw_line(Vector2(workspace_center.x - min_line_length / 2.0, min_max_lines_center_y - 15), Vector2(workspace_center.x + min_line_length / 2.0, min_max_lines_center_y - 15), dark_gray, debug_line_width)
@@ -70,18 +69,18 @@ func get_workspace() -> Rect2:
 
 func get_min_line_length() -> float:
     var rect := get_workspace()
-    return min(rect.size.x, rect.size.y) * target_line_min_length_workspace_ratio
+    return minf(rect.size.x, rect.size.y) * target_line_min_length_workspace_ratio
 
 
 func get_max_line_length() -> float:
     var rect := get_workspace()
-    return min(rect.size.x, rect.size.y) * target_line_max_length_workspace_ratio
+    return minf(rect.size.x, rect.size.y) * target_line_max_length_workspace_ratio
 
 
 func create_new_target_line() -> void:
     var workspace := get_workspace()
-    var min_line_length: float = get_min_line_length()
-    var max_line_length: float = get_max_line_length()
+    var min_line_length := get_min_line_length()
+    var max_line_length := get_max_line_length()
 
     var calc_random_point_in_workspace := func() -> Vector2: return Vector2(randf_range(workspace.position.x, workspace.end.x), randf_range(workspace.position.y, workspace.end.y))
     var p0 := calc_random_point_in_workspace.call() as Vector2
