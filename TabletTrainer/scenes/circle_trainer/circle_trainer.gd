@@ -45,9 +45,27 @@ func _draw() -> void:
     draw_arc(target_circle_position, target_circle_radius, 0.0, 2.0 * PI, 128, Color.WHITE, target_circle_line_width)
 
     if show_debug_info:
+        const debug_line_width := 10
+        const dark_gray := Color(0.25, 0.25, 0.25)
+        var workspace := get_workspace()
+
+        # draw workspace rect
+        draw_rect(workspace, dark_gray, false, debug_line_width)
+
+        # draw min and max circle radius
+        var margin := get_workspace_margin()
+        var min_circle_radius := get_min_circle_radius()
+        var max_circle_radius := get_max_circle_radius()
+        var debug_circle_position := Vector2(margin + max_circle_radius, workspace.end.y - max_circle_radius)
+
+        draw_arc(debug_circle_position, min_circle_radius, 0.0, 2.0 * PI, 128, dark_gray, debug_line_width)
+        draw_arc(debug_circle_position, max_circle_radius, 0.0, 2.0 * PI, 128, dark_gray, debug_line_width)
+
+        # projected points on target circle
         for p in projected_circle_points:
             draw_arc(p, 5, 0, 2.0 * PI, 8, Color.BLUE)
 
+        # drawing arc
         if info_drawing_arc_direction != "--":
             var start_angle := info_drawing_arc_position.angle_to_point(info_drawing_arc_first_point)
             var end_angle := start_angle + info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == "CW" else -2.0)
