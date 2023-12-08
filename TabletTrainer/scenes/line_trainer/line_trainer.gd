@@ -177,6 +177,7 @@ func add_debug_line(point: Vector2) -> Line2D:
 func delete_debug_lines() -> void:
     if debug_lines:
         debug_lines.queue_free()
+        debug_lines = null
         projected_line_points.clear()
         queue_redraw()
 
