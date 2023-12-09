@@ -182,6 +182,7 @@ func delete_debug_lines() -> void:
     if debug_lines:
         debug_lines.queue_free()
         debug_lines = null
+        last_debug_line = null
         projected_circle_points.clear()
         queue_redraw()
 
