@@ -25,7 +25,6 @@ var info_drawing_arc_last_point := Vector2.ZERO
 var show_debug_info := false
 var debug_lines: Node2D = null
 var last_debug_line: Line2D = null
-var last_debug_label: Label = null
 var projected_circle_points: Array[Vector2] = []
 
 @onready var drawing: Drawing = $Drawing
@@ -172,8 +171,6 @@ func add_debug_line(point: Vector2) -> Line2D:
     label.rotation = line.points[1].angle_to_point(line.points[0])
     label.z_index = 1
     line.add_child(label)
-
-    last_debug_label = label
 
     return line
 
