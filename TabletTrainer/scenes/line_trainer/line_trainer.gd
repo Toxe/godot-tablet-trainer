@@ -179,6 +179,7 @@ func delete_debug_lines() -> void:
         debug_lines = null
         last_debug_line = null
         projected_line_points.clear()
+    if show_debug_info:
         queue_redraw()
 
 
@@ -307,7 +308,9 @@ func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
         last_debug_line.default_color = Color.RED
 
     projected_line_points.append({"point": b, "color": last_debug_line.default_color})
-    queue_redraw()
+
+    if show_debug_info:
+        queue_redraw()
 
     update_info_label()
 

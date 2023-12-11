@@ -181,6 +181,7 @@ func delete_debug_lines() -> void:
         debug_lines = null
         last_debug_line = null
         projected_circle_points.clear()
+    if show_debug_info:
         queue_redraw()
 
 
@@ -295,7 +296,8 @@ func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
                 info_drawing_arc_angle = absolute_arc_angle
                 info_drawing_arc_length = target_circle_circumference * (absf(info_drawing_arc_angle) + info_drawing_arc_revolutions * 2.0 * PI) / (2.0 * PI)
 
-    queue_redraw()
+    if show_debug_info:
+        queue_redraw()
 
 
 func _on_trainer_ui_toggle_debug_info(should_show_debug_info: bool) -> void:
