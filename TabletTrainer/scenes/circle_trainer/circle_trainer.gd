@@ -7,8 +7,8 @@ const target_circle_max_radius_screen_ratio := 0.3
 
 var target_circle_position := Vector2.ZERO
 var target_circle_radius := 0.0
-var old_target_circle_position := Vector2.ZERO
-var old_target_circle_radius := 0.0
+var prev_target_circle_position := Vector2.ZERO
+var prev_target_circle_radius := 0.0
 
 var info_count_points := 0
 var info_sum_distance_to_target := 0.0
@@ -40,7 +40,7 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-    draw_arc(old_target_circle_position, old_target_circle_radius, 0.0, 2.0 * PI, 128, Color(0.4, 0.4, 0.4), target_circle_line_width)
+    draw_arc(prev_target_circle_position, prev_target_circle_radius, 0.0, 2.0 * PI, 128, Color(0.4, 0.4, 0.4), target_circle_line_width)
     draw_arc(target_circle_position, target_circle_radius, 0.0, 2.0 * PI, 128, Color.WHITE, target_circle_line_width)
 
     if show_debug_info:
@@ -185,9 +185,9 @@ func delete_debug_lines() -> void:
         queue_redraw()
 
 
-func update_old_target_circle() -> void:
-    old_target_circle_position = target_circle_position
-    old_target_circle_radius = target_circle_radius
+func update_prev_target_circle() -> void:
+    prev_target_circle_position = target_circle_position
+    prev_target_circle_radius = target_circle_radius
 
 
 func is_new_point_for_arc(arc_direction: String, angle_start_to_end: float, angle_drawing_arc_last_point_to_end_point: float) -> bool:
@@ -230,7 +230,7 @@ func _on_drawing_started(_point: Vector2) -> void:
 
 
 func _on_drawing_stopped(_point: Vector2) -> void:
-    update_old_target_circle()
+    update_prev_target_circle()
     create_new_target_circle()
 
 

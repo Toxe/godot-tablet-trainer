@@ -21,7 +21,7 @@ var projected_line_points: Array[Dictionary] = []
 @onready var drawing: Drawing = $Drawing
 @onready var trainer_ui: TrainerUI = $TrainerUI
 @onready var target_line: Line2D = $TargetLine
-@onready var old_target_line: Line2D = $OldTargetLine
+@onready var prev_target_line: Line2D = $OldTargetLine
 @onready var info_label: Label = $InfoLabel
 
 
@@ -183,10 +183,10 @@ func delete_debug_lines() -> void:
         queue_redraw()
 
 
-func update_old_target_line(line: Line2D) -> void:
-    old_target_line.clear_points()
-    old_target_line.add_point(line.points[0])
-    old_target_line.add_point(line.points[1])
+func update_prev_target_line(line: Line2D) -> void:
+    prev_target_line.clear_points()
+    prev_target_line.add_point(line.points[0])
+    prev_target_line.add_point(line.points[1])
 
 
 func project_point_onto_line(point: Vector2, line: Line2D) -> Vector2:
@@ -234,7 +234,7 @@ func _on_drawing_started(_point: Vector2) -> void:
 
 
 func _on_drawing_stopped(_point: Vector2) -> void:
-    update_old_target_line(target_line)
+    update_prev_target_line(target_line)
     create_new_target_line()
 
 
