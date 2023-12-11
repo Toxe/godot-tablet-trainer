@@ -1,0 +1,56 @@
+class_name Utils
+
+
+static func debug_log(object: Object = null, text: Variant = null) -> void:
+    var object_id := "" if object == null else str(object) + " | "
+    var append_text := "" if text == null else " | " + str(text)
+    print("[%d | %d] %s%s:%d%s" % [Engine.get_physics_frames(), Engine.get_process_frames(), object_id, get_stack()[1]["function"], get_stack()[1]["line"], append_text])
+
+
+static func node_notification_name(what: int) -> String:
+    match what:
+        Object.NOTIFICATION_POSTINITIALIZE: return "postinitialize"
+        Object.NOTIFICATION_PREDELETE: return "predelete"
+        Node.NOTIFICATION_ENTER_TREE: return "enter_tree"
+        Node.NOTIFICATION_EXIT_TREE: return "exit_tree"
+        Node.NOTIFICATION_MOVED_IN_PARENT: return "moved_in_parent"
+        Node.NOTIFICATION_READY: return "ready"
+        Node.NOTIFICATION_PAUSED: return "paused"
+        Node.NOTIFICATION_UNPAUSED: return "unpaused"
+        Node.NOTIFICATION_PHYSICS_PROCESS: return "physics_process"
+        Node.NOTIFICATION_PROCESS: return "process"
+        Node.NOTIFICATION_PARENTED: return "parented"
+        Node.NOTIFICATION_UNPARENTED: return "unparented"
+        Node.NOTIFICATION_SCENE_INSTANTIATED: return "scene_instantiated"
+        Node.NOTIFICATION_DRAG_BEGIN: return "drag_begin"
+        Node.NOTIFICATION_DRAG_END: return "drag_end"
+        Node.NOTIFICATION_PATH_RENAMED: return "path_renamed"
+        Node.NOTIFICATION_CHILD_ORDER_CHANGED: return "child_order_changed"
+        Node.NOTIFICATION_INTERNAL_PROCESS: return "internal_process"
+        Node.NOTIFICATION_INTERNAL_PHYSICS_PROCESS: return "internal_physics_process"
+        Node.NOTIFICATION_POST_ENTER_TREE: return "post_enter_tree"
+        Node.NOTIFICATION_DISABLED: return "disabled"
+        Node.NOTIFICATION_ENABLED: return "enabled"
+        Node.NOTIFICATION_WM_MOUSE_ENTER: return "wm_mouse_enter"
+        Node.NOTIFICATION_WM_MOUSE_EXIT: return "wm_mouse_exit"
+        Node.NOTIFICATION_WM_WINDOW_FOCUS_IN: return "wm_window_focus_in"
+        Node.NOTIFICATION_WM_WINDOW_FOCUS_OUT: return "wm_window_focus_out"
+        Node.NOTIFICATION_WM_CLOSE_REQUEST: return "wm_close_request"
+        Node.NOTIFICATION_WM_GO_BACK_REQUEST: return "wm_go_back_request"
+        Node.NOTIFICATION_WM_SIZE_CHANGED: return "wm_size_changed"
+        Node.NOTIFICATION_WM_DPI_CHANGE: return "wm_dpi_change"
+        Node.NOTIFICATION_VP_MOUSE_ENTER: return "vp_mouse_enter"
+        Node.NOTIFICATION_VP_MOUSE_EXIT: return "vp_mouse_exit"
+        Node.NOTIFICATION_OS_MEMORY_WARNING: return "os_memory_warning"
+        Node.NOTIFICATION_TRANSLATION_CHANGED: return "translation_changed"
+        Node.NOTIFICATION_WM_ABOUT: return "wm_about"
+        Node.NOTIFICATION_CRASH: return "crash"
+        Node.NOTIFICATION_OS_IME_UPDATE: return "os_ime_update"
+        Node.NOTIFICATION_APPLICATION_RESUMED: return "application_resumed"
+        Node.NOTIFICATION_APPLICATION_PAUSED: return "application_paused"
+        Node.NOTIFICATION_APPLICATION_FOCUS_IN: return "application_focus_in"
+        Node.NOTIFICATION_APPLICATION_FOCUS_OUT: return "application_focus_out"
+        Node.NOTIFICATION_TEXT_SERVER_CHANGED: return "text_server_changed"
+        Node.NOTIFICATION_EDITOR_PRE_SAVE: return "editor_pre_save"
+        Node.NOTIFICATION_EDITOR_POST_SAVE: return "editor_post_save"
+        _: return "unknown"
