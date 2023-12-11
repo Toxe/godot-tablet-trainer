@@ -245,7 +245,7 @@ func _on_drawing_point_added(point: Vector2) -> void:
     update_info_label()
 
 
-func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
+func _on_drawing_segment_added(start_point: Vector2, end_point: Vector2) -> void:
     info_drawing_length += start_point.distance_to(end_point)
 
     if info_drawing_arc_direction == "--":

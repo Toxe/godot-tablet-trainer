@@ -3,7 +3,7 @@ class_name Drawing extends Node2D
 signal started(point: Vector2)
 signal stopped(point: Vector2)
 signal point_added(point: Vector2)
-signal line_drawn(start_point: Vector2, end_point: Vector2)
+signal segment_added(start_point: Vector2, end_point: Vector2)
 
 var is_drawing := false
 var line: Line2D = null
@@ -61,4 +61,4 @@ func add_point(point: Vector2) -> void:
     point_added.emit(point)
 
     if line.get_point_count() > 1:
-        line_drawn.emit(line.points[-2], point)
+        segment_added.emit(line.points[-2], point)

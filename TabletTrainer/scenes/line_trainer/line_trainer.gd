@@ -144,7 +144,7 @@ func add_debug_line(point: Vector2) -> Line2D:
     elif point_behind_line(point_on_line, target_line):
         line.points[1] = p1
 
-    # color of the first debug line (additional debug lines will be colored in _on_drawing_line_drawn())
+    # color of the first debug line (additional debug lines will be colored in _on_drawing_segment_added())
     if last_debug_line == null:
         if point_inside_line(point_on_line, target_line):
             line.default_color = Color.GREEN
@@ -253,7 +253,7 @@ func _on_drawing_point_added(point: Vector2) -> void:
     last_debug_line = add_debug_line(point)
 
 
-func _on_drawing_line_drawn(start_point: Vector2, end_point: Vector2) -> void:
+func _on_drawing_segment_added(start_point: Vector2, end_point: Vector2) -> void:
     assert(last_debug_line != null)
 
     var p0 := target_line.points[0]

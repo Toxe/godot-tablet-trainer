@@ -37,8 +37,8 @@ theme_override_font_sizes/font_size = 25
 text = "info"
 metadata/_edit_use_anchors_ = true
 
-[connection signal="line_drawn" from="Drawing" to="." method="_on_drawing_line_drawn"]
 [connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
+[connection signal="segment_added" from="Drawing" to="." method="_on_drawing_segment_added"]
 [connection signal="started" from="Drawing" to="." method="_on_drawing_started"]
 [connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
 [connection signal="stopped" from="Drawing" to="." method="_on_drawing_stopped"]
