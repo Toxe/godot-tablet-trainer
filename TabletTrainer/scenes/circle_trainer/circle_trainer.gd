@@ -1,5 +1,7 @@
 extends Node2D
 
+enum DrawingArcDirection { none, CW, CCW }
+
 const margin_screen_ratio := 0.15
 const target_circle_line_width := 15
 const target_circle_min_radius_screen_ratio := 0.1
@@ -13,7 +15,7 @@ var prev_target_circle_radius := 0.0
 var info_count_points := 0
 var info_sum_distance_to_target := 0.0
 var info_drawing_length := 0.0
-var info_drawing_arc_direction := "--"
+var info_drawing_arc_direction := DrawingArcDirection.none
 var info_drawing_arc_radius := 0.0
 var info_drawing_arc_angle := 0.0
 var info_drawing_arc_length := 0.0
@@ -65,9 +67,9 @@ func _draw() -> void:
             draw_arc(p, 5, 0, 2.0 * PI, 8, Color.BLUE)
 
         # drawing arc
-        if info_drawing_arc_direction != "--":
+        if info_drawing_arc_direction != DrawingArcDirection.none:
             var start_angle := info_drawing_arc_position.angle_to_point(info_drawing_arc_first_point)
-            var end_angle := start_angle + info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == "CW" else -2.0)
+            var end_angle := start_angle + info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == DrawingArcDirection.CW else -2.0)
 
             draw_arc(info_drawing_arc_position, info_drawing_arc_radius, start_angle, end_angle, 128, Color.BLUE, target_circle_line_width)
 
@@ -116,7 +118,7 @@ func reset_info_stats() -> void:
     info_count_points = 0
     info_sum_distance_to_target = 0.0
     info_drawing_length = 0.0
-    info_drawing_arc_direction = "--"
+    info_drawing_arc_direction = DrawingArcDirection.none
     info_drawing_arc_radius = 0.0
     info_drawing_arc_angle = 0.0
     info_drawing_arc_length = 0.0
@@ -129,13 +131,13 @@ func reset_info_stats() -> void:
 func update_info_label() -> void:
     var average_distance_to_target := (info_sum_distance_to_target / info_count_points) if info_count_points > 0 else 0.0
     var target_circle_circumference := 2.0 * PI * target_circle_radius
-    var total_arc_angle := absf(info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == "CW" else -2.0))
+    var total_arc_angle := absf(info_drawing_arc_angle + info_drawing_arc_revolutions * PI * (2.0 if info_drawing_arc_direction == DrawingArcDirection.CW else -2.0))
 
     info_label.text = "points: %d, sum distance to target circle: %d, average distance: %0.2f\ntarget circle circumference: %d\ndrawing length: %d, drawing length : target circle circumference = %.03f\ndrawing arc direction: %s, angle: %0.1f° (%0.2f%%)\ndrawing arc length: %d (%0.2f%%), %d revolutions" % [
         info_count_points, info_sum_distance_to_target, average_distance_to_target,
         target_circle_circumference,
         info_drawing_length, info_drawing_length / target_circle_circumference,
-        info_drawing_arc_direction, rad_to_deg(total_arc_angle), 100.0 * total_arc_angle / (2 * PI),
+        DrawingArcDirection.find_key(info_drawing_arc_direction), rad_to_deg(total_arc_angle), 100.0 * total_arc_angle / (2 * PI),
         info_drawing_arc_length, 100.0 * info_drawing_arc_length / target_circle_circumference, info_drawing_arc_revolutions
     ]
 
@@ -190,33 +192,33 @@ func update_prev_target_circle() -> void:
     prev_target_circle_radius = target_circle_radius
 
 
-func is_new_point_for_arc(arc_direction: String, angle_start_to_end: float, angle_drawing_arc_last_point_to_end_point: float) -> bool:
-    if arc_direction == "CW":
+func is_new_point_for_arc(arc_direction: DrawingArcDirection, angle_start_to_end: float, angle_drawing_arc_last_point_to_end_point: float) -> bool:
+    if arc_direction == DrawingArcDirection.CW:
         return angle_start_to_end > 0.0 and angle_drawing_arc_last_point_to_end_point > 0.0
     else:
         return angle_start_to_end < 0.0 and angle_drawing_arc_last_point_to_end_point < 0.0
 
 
-func relative_to_absolute_arc_angle(arc_direction: String, relative_arc_angle: float) -> float:
+func relative_to_absolute_arc_angle(arc_direction: DrawingArcDirection, relative_arc_angle: float) -> float:
     var absolute_arc_angle := relative_arc_angle
 
-    if arc_direction == "CW" and relative_arc_angle < 0.0:
+    if arc_direction == DrawingArcDirection.CW and relative_arc_angle < 0.0:
         absolute_arc_angle += 2.0 * PI
-    elif arc_direction == "CCW" and relative_arc_angle > 0.0:
+    elif arc_direction == DrawingArcDirection.CCW and relative_arc_angle > 0.0:
         absolute_arc_angle -= 2.0 * PI
 
     return absolute_arc_angle
 
 
-func is_bigger_than_drawing_arc_angle(arc_direction: String, absolute_arc_angle: float, drawing_arc_angle: float) -> float:
-    if arc_direction == "CW":
+func is_bigger_than_drawing_arc_angle(arc_direction: DrawingArcDirection, absolute_arc_angle: float, drawing_arc_angle: float) -> float:
+    if arc_direction == DrawingArcDirection.CW:
         return absolute_arc_angle > drawing_arc_angle
     else:
         return absolute_arc_angle < drawing_arc_angle
 
 
-func has_finished_one_revolution(arc_direction: String, relative_arc_angle: float, prev_relative_arc_angle: float) -> bool:
-    if arc_direction == "CW":
+func has_finished_one_revolution(arc_direction: DrawingArcDirection, relative_arc_angle: float, prev_relative_arc_angle: float) -> bool:
+    if arc_direction == DrawingArcDirection.CW:
         return relative_arc_angle >= 0.0 and prev_relative_arc_angle < 0.0
     else:
         return relative_arc_angle <= 0.0 and prev_relative_arc_angle > 0.0
@@ -248,7 +250,7 @@ func _on_drawing_point_added(point: Vector2) -> void:
 func _on_drawing_segment_added(start_point: Vector2, end_point: Vector2) -> void:
     info_drawing_length += start_point.distance_to(end_point)
 
-    if info_drawing_arc_direction == "--":
+    if info_drawing_arc_direction == DrawingArcDirection.none:
         info_drawing_arc_radius = target_circle_radius * 0.75
         info_drawing_arc_position = target_circle_position
         info_drawing_arc_first_point = start_point
@@ -258,14 +260,10 @@ func _on_drawing_segment_added(start_point: Vector2, end_point: Vector2) -> void
         var dir_to_end_point := info_drawing_arc_position.direction_to(end_point)
         var angle_start_to_end := dir_to_start_point.angle_to(dir_to_end_point)
 
-        if angle_start_to_end >= 0.0:
-            info_drawing_arc_direction = "CW"
-        else:
-            info_drawing_arc_direction = "CCW"
-
+        info_drawing_arc_direction = DrawingArcDirection.CW if angle_start_to_end >= 0.0 else DrawingArcDirection.CCW
         info_drawing_arc_angle = angle_start_to_end
     else:
-        assert(info_drawing_arc_direction in ["CW", "CCW"])
+        assert(info_drawing_arc_direction in [DrawingArcDirection.CW, DrawingArcDirection.CCW])
 
         var prev_dir_to_drawing_arc_first_point := info_drawing_arc_position.direction_to(info_drawing_arc_first_point)
         var prev_dir_to_drawing_arc_last_point := info_drawing_arc_position.direction_to(info_drawing_arc_last_point)
