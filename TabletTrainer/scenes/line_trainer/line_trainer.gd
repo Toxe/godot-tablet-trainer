@@ -225,14 +225,14 @@ func point_behind_line(point_on_line: Vector2, line: Line2D) -> bool:
     return dist_p1_to_point < dist_p0_to_point and dist_p0_to_point > dist_p0_to_p1
 
 
-func _on_drawing_started(_point: Vector2i) -> void:
+func _on_drawing_started() -> void:
     reset_info_stats()
     update_info_label()
 
     delete_debug_lines()
 
 
-func _on_drawing_stopped(_point: Vector2i) -> void:
+func _on_drawing_stopped() -> void:
     update_prev_target_line(target_line)
     create_new_target_line()
 

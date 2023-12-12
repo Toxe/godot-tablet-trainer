@@ -1,7 +1,7 @@
 class_name Drawing extends Node2D
 
-signal started(point: Vector2i)
-signal stopped(point: Vector2i)
+signal started()
+signal stopped()
 signal point_added(point: Vector2i)
 signal segment_added(start_point: Vector2i, end_point: Vector2i)
 
@@ -35,7 +35,7 @@ func start_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
     line.default_color = Color.BLACK
     add_child(line)
 
-    started.emit(mouse_motion_event.position)
+    started.emit()
 
     add_point(mouse_motion_event.position)
 
@@ -49,7 +49,7 @@ func stop_drawing(mouse_motion_event: InputEventMouseMotion) -> void:
 
     is_drawing = false
 
-    stopped.emit(mouse_motion_event.position)
+    stopped.emit()
 
 
 func add_point(point: Vector2) -> void:

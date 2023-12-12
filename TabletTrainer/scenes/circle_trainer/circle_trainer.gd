@@ -224,14 +224,14 @@ func has_finished_one_revolution(arc_direction: DrawingArcDirection, relative_ar
         return relative_arc_angle <= 0.0 and prev_relative_arc_angle > 0.0
 
 
-func _on_drawing_started(_point: Vector2i) -> void:
+func _on_drawing_started() -> void:
     reset_info_stats()
     update_info_label()
 
     delete_debug_lines()
 
 
-func _on_drawing_stopped(_point: Vector2i) -> void:
+func _on_drawing_stopped() -> void:
     update_prev_target_circle()
     create_new_target_circle()
 
