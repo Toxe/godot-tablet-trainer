@@ -7,9 +7,9 @@ const target_circle_line_width := 15
 const target_circle_min_radius_screen_ratio := 0.1
 const target_circle_max_radius_screen_ratio := 0.3
 
-var target_circle_position := Vector2.ZERO
+var target_circle_position := Vector2i.ZERO
 var target_circle_radius := 0.0
-var prev_target_circle_position := Vector2.ZERO
+var prev_target_circle_position := Vector2i.ZERO
 var prev_target_circle_radius := 0.0
 
 var info_count_points := 0
@@ -77,25 +77,25 @@ func _draw() -> void:
             draw_line(info_drawing_arc_position, info_drawing_arc_last_point, Color.GREEN, 2)
 
 
-func get_workspace_margin() -> float:
+func get_workspace_margin() -> int:
     var window_size := get_window().size
-    return mini(window_size.x, window_size.y) * margin_screen_ratio
+    return roundi(mini(window_size.x, window_size.y) * margin_screen_ratio)
 
 
-func get_workspace() -> Rect2:
+func get_workspace() -> Rect2i:
     var window_size := get_window().size
     var margin := get_workspace_margin()
-    return Rect2(margin, margin, window_size.x - 2 * margin, window_size.y - 2 * margin)
+    return Rect2i(margin, margin, window_size.x - 2 * margin, window_size.y - 2 * margin)
 
 
 func get_min_circle_radius() -> float:
     var rect := get_workspace()
-    return minf(rect.size.x, rect.size.y) * target_circle_min_radius_screen_ratio
+    return mini(rect.size.x, rect.size.y) * target_circle_min_radius_screen_ratio
 
 
 func get_max_circle_radius() -> float:
     var rect := get_workspace()
-    return minf(rect.size.x, rect.size.y) * target_circle_max_radius_screen_ratio
+    return mini(rect.size.x, rect.size.y) * target_circle_max_radius_screen_ratio
 
 
 func create_new_target_circle() -> void:
@@ -104,12 +104,12 @@ func create_new_target_circle() -> void:
 
     target_circle_radius = randf_range(get_min_circle_radius(), get_max_circle_radius())
 
-    var x_min := margin + target_circle_radius
-    var y_min := margin + target_circle_radius
-    var x_max := workspace.end.x - target_circle_radius
-    var y_max := workspace.end.y - target_circle_radius
+    var x_min := int(margin + target_circle_radius)
+    var y_min := int(margin + target_circle_radius)
+    var x_max := int(workspace.end.x - target_circle_radius)
+    var y_max := int(workspace.end.y - target_circle_radius)
 
-    target_circle_position = Vector2(randf_range(x_min, x_max), randf_range(y_min, y_max))
+    target_circle_position = Vector2i(randi_range(x_min, x_max), randi_range(y_min, y_max))
 
     queue_redraw()
 
@@ -224,20 +224,20 @@ func has_finished_one_revolution(arc_direction: DrawingArcDirection, relative_ar
         return relative_arc_angle <= 0.0 and prev_relative_arc_angle > 0.0
 
 
-func _on_drawing_started(_point: Vector2) -> void:
+func _on_drawing_started(_point: Vector2i) -> void:
     reset_info_stats()
     update_info_label()
 
     delete_debug_lines()
 
 
-func _on_drawing_stopped(_point: Vector2) -> void:
+func _on_drawing_stopped(_point: Vector2i) -> void:
     update_prev_target_circle()
     create_new_target_circle()
 
 
-func _on_drawing_point_added(point: Vector2) -> void:
-    var distance_to_center := point.distance_to(target_circle_position)
+func _on_drawing_point_added(point: Vector2i) -> void:
+    var distance_to_center := Vector2(point).distance_to(target_circle_position)
 
     info_count_points += 1
     info_sum_distance_to_target += absf(target_circle_radius - distance_to_center)
@@ -247,8 +247,8 @@ func _on_drawing_point_added(point: Vector2) -> void:
     update_info_label()
 
 
-func _on_drawing_segment_added(start_point: Vector2, end_point: Vector2) -> void:
-    info_drawing_length += start_point.distance_to(end_point)
+func _on_drawing_segment_added(start_point: Vector2i, end_point: Vector2i) -> void:
+    info_drawing_length += Vector2(start_point).distance_to(end_point)
 
     if info_drawing_arc_direction == DrawingArcDirection.none:
         info_drawing_arc_radius = target_circle_radius * 0.75

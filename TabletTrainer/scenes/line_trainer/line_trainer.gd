@@ -55,15 +55,15 @@ func _draw() -> void:
             draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
 
 
-func get_workspace_margin() -> float:
+func get_workspace_margin() -> int:
     var window_size := get_window().size
-    return mini(window_size.x, window_size.y) * margin_screen_ratio
+    return roundi(mini(window_size.x, window_size.y) * margin_screen_ratio)
 
 
-func get_workspace() -> Rect2:
+func get_workspace() -> Rect2i:
     var window_size := get_window().size
     var margin := get_workspace_margin()
-    return Rect2(margin, margin, window_size.x - 2 * margin, window_size.y - 2 * margin)
+    return Rect2i(margin, margin, window_size.x - 2 * margin, window_size.y - 2 * margin)
 
 
 func get_min_line_length() -> float:
@@ -81,11 +81,11 @@ func create_new_target_line() -> void:
     var min_line_length := get_min_line_length()
     var max_line_length := get_max_line_length()
 
-    var calc_random_point_in_workspace := func() -> Vector2: return Vector2(randf_range(workspace.position.x, workspace.end.x), randf_range(workspace.position.y, workspace.end.y))
-    var p0 := calc_random_point_in_workspace.call() as Vector2
-    var p1 := calc_random_point_in_workspace.call() as Vector2
+    var calc_random_point_in_workspace := func() -> Vector2i: return Vector2i(randi_range(workspace.position.x, workspace.end.x), randi_range(workspace.position.y, workspace.end.y))
+    var p0: Vector2i = calc_random_point_in_workspace.call()
+    var p1: Vector2i = calc_random_point_in_workspace.call()
 
-    while p0.distance_to(p1) < min_line_length or p0.distance_to(p1) > max_line_length:
+    while Vector2(p0).distance_to(p1) < min_line_length or Vector2(p0).distance_to(p1) > max_line_length:
         p1 = calc_random_point_in_workspace.call()
 
     target_line.clear_points()
@@ -225,21 +225,21 @@ func point_behind_line(point_on_line: Vector2, line: Line2D) -> bool:
     return dist_p1_to_point < dist_p0_to_point and dist_p0_to_point > dist_p0_to_p1
 
 
-func _on_drawing_started(_point: Vector2) -> void:
+func _on_drawing_started(_point: Vector2i) -> void:
     reset_info_stats()
     update_info_label()
 
     delete_debug_lines()
 
 
-func _on_drawing_stopped(_point: Vector2) -> void:
+func _on_drawing_stopped(_point: Vector2i) -> void:
     update_prev_target_line(target_line)
     create_new_target_line()
 
 
-func _on_drawing_point_added(point: Vector2) -> void:
+func _on_drawing_point_added(point: Vector2i) -> void:
     var point_on_line := project_point_onto_line(point, target_line)
-    var distance_point_to_target_line := point.distance_to(point_on_line)
+    var distance_point_to_target_line := Vector2(point).distance_to(point_on_line)
 
     info_count_points += 1
     info_sum_distance_to_target += distance_point_to_target_line
@@ -252,13 +252,13 @@ func _on_drawing_point_added(point: Vector2) -> void:
     last_debug_line = add_debug_line(point)
 
 
-func _on_drawing_segment_added(start_point: Vector2, end_point: Vector2) -> void:
+func _on_drawing_segment_added(start_point: Vector2i, end_point: Vector2i) -> void:
     assert(last_debug_line != null)
 
     var p0 := target_line.points[0]
     var p1 := target_line.points[1]
 
-    info_drawing_length += start_point.distance_to(end_point)
+    info_drawing_length += Vector2(start_point).distance_to(end_point)
 
     # ---- covered length inside/outside
     var a := project_point_onto_line(start_point, target_line)

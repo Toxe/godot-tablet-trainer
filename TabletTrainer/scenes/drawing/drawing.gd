@@ -1,9 +1,9 @@
 class_name Drawing extends Node2D
 
-signal started(point: Vector2)
-signal stopped(point: Vector2)
-signal point_added(point: Vector2)
-signal segment_added(start_point: Vector2, end_point: Vector2)
+signal started(point: Vector2i)
+signal stopped(point: Vector2i)
+signal point_added(point: Vector2i)
+signal segment_added(start_point: Vector2i, end_point: Vector2i)
 
 var is_drawing := false
 var line: Line2D = null

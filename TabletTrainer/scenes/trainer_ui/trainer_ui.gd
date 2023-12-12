@@ -46,11 +46,11 @@ func _on_toggle_stats_button_pressed() -> void:
     toggle_stats.emit(show_stats)
 
 
-func _on_drawing_started(_point: Vector2) -> void:
+func _on_drawing_started(_point: Vector2i) -> void:
     is_drawing = true
     update_start_time()
 
 
-func _on_drawing_stopped(_point: Vector2) -> void:
+func _on_drawing_stopped(_point: Vector2i) -> void:
     is_drawing = false
     update_end_time()
