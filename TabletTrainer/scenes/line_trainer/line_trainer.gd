@@ -20,7 +20,7 @@ var projected_line_points: Array[Dictionary] = []
 @onready var drawing: Drawing = $Drawing
 @onready var trainer_ui: TrainerUI = $TrainerUI
 @onready var target_line: Line2D = $TargetLine
-@onready var prev_target_line: Line2D = $OldTargetLine
+@onready var prev_target_line: Line2D = $PrevTargetLine
 @onready var info_label: Label = $InfoLabel
 
 
