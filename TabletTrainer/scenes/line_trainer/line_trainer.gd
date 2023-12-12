@@ -1,7 +1,6 @@
 extends Node2D
 
 const margin_screen_ratio := 0.15
-const target_line_width := 15
 const target_line_min_length_workspace_ratio := 0.5
 const target_line_max_length_workspace_ratio := 2.0
 
