@@ -26,7 +26,6 @@ var info_drawing_arc_last_point := Vector2.ZERO
 
 var show_debug_info := false
 var debug_lines: Node2D = null
-var last_debug_line: Line2D = null
 var projected_circle_points: Array[Vector2] = []
 
 @onready var drawing: Drawing = $Drawing
@@ -144,7 +143,7 @@ func update_info_label() -> void:
     ]
 
 
-func add_debug_line(point: Vector2) -> Line2D:
+func add_debug_line(point: Vector2) -> void:
     var direction_to_center := point.direction_to(target_circle_position)
     var distance_to_center := point.distance_to(target_circle_position)
     var distance_to_circle := absf(target_circle_radius - distance_to_center)
@@ -175,14 +174,11 @@ func add_debug_line(point: Vector2) -> Line2D:
     label.rotation = line.points[1].angle_to_point(line.points[0])
     line.add_child(label)
 
-    return line
-
 
 func delete_debug_lines() -> void:
     if debug_lines:
         debug_lines.queue_free()
         debug_lines = null
-        last_debug_line = null
         projected_circle_points.clear()
     if show_debug_info:
         queue_redraw()
@@ -243,7 +239,7 @@ func _on_drawing_point_added(point: Vector2i) -> void:
     info_count_points += 1
     info_sum_distance_to_target += absf(target_circle_radius - distance_to_center)
 
-    last_debug_line = add_debug_line(point)
+    add_debug_line(point)
 
     update_info_label()
 
