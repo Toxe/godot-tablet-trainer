@@ -166,7 +166,6 @@ func add_debug_line(point: Vector2) -> Line2D:
     label.position = point
     label.position += debug_line_direction * -10.0 + debug_line_normal * label.size.y / 2.0
     label.rotation = line.points[1].angle_to_point(line.points[0])
-    label.z_index = 1
     line.add_child(label)
 
     return line

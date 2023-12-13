@@ -7,13 +7,12 @@
 [node name="CircleTrainer" type="Node2D"]
 script = ExtResource("1_52hda")
 
-[node name="Drawing" parent="." instance=ExtResource("2_kl7y5")]
-z_index = 1
-
 [node name="TrainerUI" parent="." instance=ExtResource("2_bhn12")]
 
+[node name="Drawing" parent="." instance=ExtResource("2_kl7y5")]
+
 [node name="InfoLabel" type="Label" parent="."]
-z_index = 2
+z_index = 1
 offset_left = 20.0
 offset_top = 150.0
 offset_right = 76.0
@@ -24,11 +23,11 @@ theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 25
 text = "info"
 
+[connection signal="toggle_debug_info" from="TrainerUI" to="." method="_on_trainer_ui_toggle_debug_info"]
+[connection signal="toggle_stats" from="TrainerUI" to="." method="_on_trainer_ui_toggle_stats"]
 [connection signal="point_added" from="Drawing" to="." method="_on_drawing_point_added"]
 [connection signal="segment_added" from="Drawing" to="." method="_on_drawing_segment_added"]
 [connection signal="started" from="Drawing" to="." method="_on_drawing_started"]
 [connection signal="started" from="Drawing" to="TrainerUI" method="_on_drawing_started"]
 [connection signal="stopped" from="Drawing" to="." method="_on_drawing_stopped"]
 [connection signal="stopped" from="Drawing" to="TrainerUI" method="_on_drawing_stopped"]
-[connection signal="toggle_debug_info" from="TrainerUI" to="." method="_on_trainer_ui_toggle_debug_info"]
-[connection signal="toggle_stats" from="TrainerUI" to="." method="_on_trainer_ui_toggle_stats"]
