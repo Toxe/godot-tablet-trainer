@@ -1,11 +1,39 @@
-[gd_scene load_steps=4 format=3 uid="uid://kmkam625oih7"]
+[gd_scene load_steps=10 format=3 uid="uid://kmkam625oih7"]
 
 [ext_resource type="Script" path="res://scenes/line_trainer/line_trainer.gd" id="1_lp83l"]
 [ext_resource type="PackedScene" uid="uid://d1e5t3605hrpa" path="res://scenes/trainer_ui/trainer_ui.tscn" id="2_7glub"]
 [ext_resource type="PackedScene" uid="uid://r6egmegqdfch" path="res://scenes/drawing/drawing.tscn" id="2_eeytx"]
 
+[sub_resource type="Curve" id="Curve_2hqoe"]
+_data = [Vector2(0, 0), 0.0, 2.0, 0, 1, Vector2(0.5, 1), 2.0, -2.0, 1, 1, Vector2(1, 0), -2.0, 0.0, 1, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_t8nxf"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 1, Vector2(1, 1), 1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_pt8a4"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_kr3cr"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_6r4t2"]
+_data = [Vector2(0, 1), 0.0, -1.0, 0, 1, Vector2(1, 0), -1.0, 0.0, 1, 0]
+point_count = 2
+
+[sub_resource type="Theme" id="Theme_tm2ld"]
+Label/font_sizes/font_size = 20
+
 [node name="LineTrainer" type="Node2D"]
 script = ExtResource("1_lp83l")
+precision_length_curve = SubResource("Curve_2hqoe")
+precision_coverage_inside_curve = SubResource("Curve_t8nxf")
+precision_coverage_outside_curve = SubResource("Curve_pt8a4")
+precision_distance_sum_curve = SubResource("Curve_kr3cr")
+precision_distance_average_curve = SubResource("Curve_6r4t2")
 
 [node name="TrainerUI" parent="." instance=ExtResource("2_7glub")]
 
@@ -36,6 +64,108 @@ theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 25
 text = "info"
 metadata/_edit_use_anchors_ = true
+
+[node name="GridContainer" type="GridContainer" parent="."]
+offset_left = 997.0
+offset_top = 21.0
+offset_right = 1147.0
+offset_bottom = 98.0
+theme = SubResource("Theme_tm2ld")
+columns = 2
+
+[node name="LabelLength" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Length:"
+horizontal_alignment = 2
+
+[node name="LabelLengthFactor" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
+
+[node name="HSeparator" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="LabelCoverageInside" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Coverage, inside:"
+horizontal_alignment = 2
+
+[node name="LabelCoverageInsideFactor" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
+
+[node name="LabelCoverageOutside" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "outside:"
+horizontal_alignment = 2
+
+[node name="LabelCoverageOutsideFactor" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
+
+[node name="HSeparator3" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="HSeparator4" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="LabelDistanceSum" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Distance, sum:"
+horizontal_alignment = 2
+
+[node name="LabelDistanceSumFactor" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
+
+[node name="LabelDistanceAverage" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "average:"
+horizontal_alignment = 2
+
+[node name="LabelDistanceAverageFactor" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
+
+[node name="HSeparator5" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="HSeparator6" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="HSeparator7" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="HSeparator8" type="HSeparator" parent="GridContainer"]
+layout_mode = 2
+
+[node name="LabelPrecisionMul" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "Precision, mul:"
+horizontal_alignment = 2
+
+[node name="LabelPrecisionMulValue" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
+
+[node name="LabelPrecisionAdd" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "add:"
+horizontal_alignment = 2
+
+[node name="LabelPrecisionAddValue" type="Label" parent="GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0.001"
 
 [connection signal="toggle_debug_info" from="TrainerUI" to="." method="_on_trainer_ui_toggle_debug_info"]
 [connection signal="toggle_stats" from="TrainerUI" to="." method="_on_trainer_ui_toggle_stats"]

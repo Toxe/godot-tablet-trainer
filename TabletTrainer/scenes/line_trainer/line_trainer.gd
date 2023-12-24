@@ -4,6 +4,12 @@ const margin_screen_ratio := 0.15
 const target_line_min_length_workspace_ratio := 0.5
 const target_line_max_length_workspace_ratio := 2.0
 
+@export var precision_length_curve: Curve = null
+@export var precision_coverage_inside_curve: Curve = null
+@export var precision_coverage_outside_curve: Curve = null
+@export var precision_distance_sum_curve: Curve = null
+@export var precision_distance_average_curve: Curve = null
+
 var info_count_points := 0
 var info_sum_distance_to_target := 0.0
 var info_drawing_length := 0.0
@@ -78,19 +84,21 @@ func get_max_line_length() -> float:
 
 func create_new_target_line() -> void:
     var workspace := get_workspace()
-    var min_line_length := get_min_line_length()
-    var max_line_length := get_max_line_length()
+    # var min_line_length := get_min_line_length()
+    # var max_line_length := get_max_line_length()
 
-    var calc_random_point_in_workspace := func() -> Vector2i: return Vector2i(randi_range(workspace.position.x, workspace.end.x), randi_range(workspace.position.y, workspace.end.y))
-    var p0: Vector2i = calc_random_point_in_workspace.call()
-    var p1: Vector2i = calc_random_point_in_workspace.call()
+    # var calc_random_point_in_workspace := func() -> Vector2i: return Vector2i(randi_range(workspace.position.x, workspace.end.x), randi_range(workspace.position.y, workspace.end.y))
+    # var p0: Vector2i = calc_random_point_in_workspace.call()
+    # var p1: Vector2i = calc_random_point_in_workspace.call()
 
-    while Vector2(p0).distance_to(p1) < min_line_length or Vector2(p0).distance_to(p1) > max_line_length:
-        p1 = calc_random_point_in_workspace.call()
+    # while Vector2(p0).distance_to(p1) < min_line_length or Vector2(p0).distance_to(p1) > max_line_length:
+    #     p1 = calc_random_point_in_workspace.call()
 
     target_line.clear_points()
-    target_line.add_point(p0)
-    target_line.add_point(p1)
+    # target_line.add_point(p0)
+    # target_line.add_point(p1)
+    target_line.add_point(workspace.get_center() - Vector2i(int(workspace.size.x / 3.0), 0))
+    target_line.add_point(workspace.get_center() + Vector2i(int(workspace.size.x / 3.0), 0))
 
 
 func reset_info_stats() -> void:
@@ -117,6 +125,39 @@ func update_info_label() -> void:
         info_covered_length_inside, info_covered_length_outside, info_covered_length_inside + info_covered_length_outside,
         covered_target_length_ratio_inside, covered_target_length_ratio_outside
     ]
+
+    var length_factor := 0.0
+    var coverage_inside_factor := 0.0
+    var coverage_outside_factor := 0.0
+    var distance_sum_factor := 0.0
+    var distance_average_factor := 0.0
+
+    if info_count_points > 0:
+        # length
+        # 0 ..   1 --> 0.0 .. 1.0
+        # 1 .. >=2 --> 1.0 .. 0.0
+        var length_curve_pos := clampf(info_drawing_length / (2.0 * target_line_length), 0.0, 1.0)
+        length_factor = precision_length_curve.sample(length_curve_pos)
+
+        # coverage
+        var coverage_inside_curve_pos := clampf(info_covered_length_inside / target_line_length, 0.0, 1.0)
+        var coverage_outside_curve_pos := clampf(info_covered_length_outside / target_line_length, 0.0, 1.0)
+        coverage_inside_factor = precision_coverage_inside_curve.sample(coverage_inside_curve_pos)
+        coverage_outside_factor = precision_coverage_outside_curve.sample(coverage_outside_curve_pos)
+
+        # distance
+        var distance_sum_pos := clampf(info_sum_distance_to_target / (10.0 * target_line_length), 0.0, 1.0)
+        var distance_average_pos := clampf(average_distance_to_target / (target_line_length / 10.0), 0.0, 1.0)
+        distance_sum_factor = precision_distance_sum_curve.sample(distance_sum_pos)
+        distance_average_factor = precision_distance_average_curve.sample(distance_average_pos)
+
+    %LabelLengthFactor.text = "%0.3f" % length_factor
+    %LabelCoverageInsideFactor.text = "%0.3f" % coverage_inside_factor
+    %LabelCoverageOutsideFactor.text = "%0.3f" % coverage_outside_factor
+    %LabelDistanceSumFactor.text = "%0.3f" % distance_sum_factor
+    %LabelDistanceAverageFactor.text = "%0.3f" % distance_average_factor
+    %LabelPrecisionMulValue.text = "%0.3f" % [length_factor * coverage_inside_factor * coverage_outside_factor * distance_sum_factor * distance_average_factor]
+    %LabelPrecisionAddValue.text = "%0.3f" % [(length_factor + coverage_inside_factor + coverage_outside_factor + distance_sum_factor + distance_average_factor) / 5.0]
 
 
 func add_debug_line(point: Vector2) -> Line2D:

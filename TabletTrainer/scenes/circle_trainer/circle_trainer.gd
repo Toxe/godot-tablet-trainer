@@ -7,6 +7,11 @@ const target_circle_line_width := 15
 const target_circle_min_radius_screen_ratio := 0.1
 const target_circle_max_radius_screen_ratio := 0.3
 
+@export var precision_length_curve: Curve = null
+@export var precision_coverage_curve: Curve = null
+@export var precision_distance_sum_curve: Curve = null
+@export var precision_distance_average_curve: Curve = null
+
 var target_circle_position := Vector2i.ZERO
 var target_circle_radius := 0.0
 var prev_target_circle_position := Vector2i.ZERO
@@ -101,16 +106,18 @@ func get_max_circle_radius() -> float:
 
 func create_new_target_circle() -> void:
     var workspace := get_workspace()
-    var margin := get_workspace_margin()
+    # var margin := get_workspace_margin()
 
-    target_circle_radius = randf_range(get_min_circle_radius(), get_max_circle_radius())
+    # target_circle_radius = randf_range(get_min_circle_radius(), get_max_circle_radius())
+    target_circle_radius = get_max_circle_radius()
 
-    var x_min := int(margin + target_circle_radius)
-    var y_min := int(margin + target_circle_radius)
-    var x_max := int(workspace.end.x - target_circle_radius)
-    var y_max := int(workspace.end.y - target_circle_radius)
+    # var x_min := int(margin + target_circle_radius)
+    # var y_min := int(margin + target_circle_radius)
+    # var x_max := int(workspace.end.x - target_circle_radius)
+    # var y_max := int(workspace.end.y - target_circle_radius)
 
-    target_circle_position = Vector2i(randi_range(x_min, x_max), randi_range(y_min, y_max))
+    # target_circle_position = Vector2i(randi_range(x_min, x_max), randi_range(y_min, y_max))
+    target_circle_position = workspace.get_center()
 
     queue_redraw()
 
@@ -141,6 +148,37 @@ func update_info_label() -> void:
         DrawingArcDirection.find_key(info_drawing_arc_direction), rad_to_deg(total_arc_angle), 100.0 * total_arc_angle / (2 * PI),
         info_drawing_arc_length, 100.0 * info_drawing_arc_length / target_circle_circumference, info_drawing_arc_revolutions
     ]
+
+    var length_factor := 0.0
+    var coverage_factor := 0.0
+    var distance_sum_factor := 0.0
+    var distance_average_factor := 0.0
+
+    if info_count_points > 0:
+        # length
+        # 0 ..   1 --> 0.0 .. 1.0
+        # 1 .. >=2 --> 1.0 .. 0.0
+        var length_curve_pos := clampf(info_drawing_length / (2.0 * target_circle_circumference), 0.0, 1.0)
+        length_factor = precision_length_curve.sample(length_curve_pos)
+
+        # coverage
+        # 0 ..   1 --> 0.0 .. 1.0
+        # 1 .. >=2 --> 1.0 .. 0.0
+        var coverage_curve_pos := clampf(info_drawing_arc_length / (2.0 * target_circle_circumference), 0.0, 1.0)
+        coverage_factor = precision_coverage_curve.sample(coverage_curve_pos)
+
+        # distance
+        var distance_sum_pos := clampf(info_sum_distance_to_target / (10.0 * target_circle_circumference), 0.0, 1.0)
+        var distance_average_pos := clampf(average_distance_to_target / (target_circle_circumference / 10.0), 0.0, 1.0)
+        distance_sum_factor = precision_distance_sum_curve.sample(distance_sum_pos)
+        distance_average_factor = precision_distance_average_curve.sample(distance_average_pos)
+
+    %LabelLengthFactor.text = "%0.3f" % length_factor
+    %LabelCoverageFactor.text = "%0.3f" % coverage_factor
+    %LabelDistanceSumFactor.text = "%0.3f" % distance_sum_factor
+    %LabelDistanceAverageFactor.text = "%0.3f" % distance_average_factor
+    %LabelPrecisionMulValue.text = "%0.3f" % [length_factor * coverage_factor * distance_sum_factor * distance_average_factor]
+    %LabelPrecisionAddValue.text = "%0.3f" % [(length_factor + coverage_factor + distance_sum_factor + distance_average_factor) / 4.0]
 
 
 func add_debug_line(point: Vector2) -> void:
