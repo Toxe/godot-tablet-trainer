@@ -146,7 +146,6 @@ func update_info_label() -> void:
 func add_debug_line(point: Vector2) -> void:
     var direction_to_center := point.direction_to(target_circle_position)
     var distance_to_center := point.distance_to(target_circle_position)
-    var distance_to_circle := absf(target_circle_radius - distance_to_center)
     var point_on_circle := point + direction_to_center * (distance_to_center - target_circle_radius)
 
     # add a new container for the debug lines
@@ -164,15 +163,6 @@ func add_debug_line(point: Vector2) -> void:
     debug_lines.add_child(line)
 
     projected_circle_points.append(point_on_circle)
-
-    var debug_line_normal := Vector2(-direction_to_center.y, direction_to_center.x)
-
-    var label := Label.new()
-    label.text = "%d" % [distance_to_circle]
-    label.position = point
-    label.position += direction_to_center * -10.0 + debug_line_normal * label.size.y / 2.0
-    label.rotation = line.points[1].angle_to_point(line.points[0])
-    line.add_child(label)
 
 
 func delete_debug_lines() -> void:

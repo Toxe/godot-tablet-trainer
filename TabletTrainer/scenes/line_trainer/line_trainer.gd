@@ -157,17 +157,6 @@ func add_debug_line(point: Vector2) -> Line2D:
 
         projected_line_points.append({"point": point_on_line, "color": line.default_color})
 
-    var distance_from_point_to_line := point.distance_to(point_on_line)
-    var debug_line_direction := line.points[0].direction_to(line.points[1])
-    var debug_line_normal := Vector2(-debug_line_direction.y, debug_line_direction.x)
-
-    var label := Label.new()
-    label.text = "%d" % [distance_from_point_to_line]
-    label.position = point
-    label.position += debug_line_direction * -10.0 + debug_line_normal * label.size.y / 2.0
-    label.rotation = line.points[1].angle_to_point(line.points[0])
-    line.add_child(label)
-
     return line
 
 
