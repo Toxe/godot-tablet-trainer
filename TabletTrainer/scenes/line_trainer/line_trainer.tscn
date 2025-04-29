@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://kmkam625oih7"]
 
-[ext_resource type="Script" path="res://scenes/line_trainer/line_trainer.gd" id="1_lp83l"]
+[ext_resource type="Script" uid="uid://expq4tp1ate4" path="res://scenes/line_trainer/line_trainer.gd" id="1_lp83l"]
 [ext_resource type="PackedScene" uid="uid://d1e5t3605hrpa" path="res://scenes/trainer_ui/trainer_ui.tscn" id="2_7glub"]
 [ext_resource type="PackedScene" uid="uid://r6egmegqdfch" path="res://scenes/drawing/drawing.tscn" id="2_eeytx"]
 

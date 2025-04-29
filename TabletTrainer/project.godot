@@ -14,7 +14,7 @@ config/name="Tablet Trainer"
 config/version="0.2"
 config/tags=PackedStringArray("2d", "program")
 run/main_scene="res://scenes/main_menu/main_menu.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
