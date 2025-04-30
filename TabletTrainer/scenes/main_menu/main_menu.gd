@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-const line_trainer_scene = preload("res://scenes/line_trainer/line_trainer.tscn")
-const circle_trainer_scene = preload("res://scenes/circle_trainer/circle_trainer.tscn")
+const line_trainer_scene: PackedScene = preload("res://scenes/line_trainer/line_trainer.tscn")
+const circle_trainer_scene: PackedScene = preload("res://scenes/circle_trainer/circle_trainer.tscn")
 
 
 func _unhandled_key_input(event: InputEvent) -> void:

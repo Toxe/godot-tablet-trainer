@@ -33,7 +33,7 @@ func update_time_label() -> void:
 
 
 func _on_quit_button_pressed() -> void:
-    get_tree().change_scene_to_packed(load("res://scenes/main_menu/main_menu.tscn"))
+    get_tree().change_scene_to_packed(load("res://scenes/main_menu/main_menu.tscn") as PackedScene)
 
 
 func _on_toggle_debug_info_button_pressed() -> void:

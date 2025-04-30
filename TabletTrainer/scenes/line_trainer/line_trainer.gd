@@ -57,8 +57,10 @@ func _draw() -> void:
         draw_line(Vector2(workspace_center.x - max_line_length / 2.0, min_max_lines_center_y + 15), Vector2(workspace_center.x + max_line_length / 2.0, min_max_lines_center_y + 15), dark_gray, debug_line_width)
 
         # projected points on target line
-        for p in projected_line_points:
-            draw_arc(p.point, 5, 0, 2.0 * PI, 8, p.color)
+        for p: Dictionary in projected_line_points:
+            var point: Vector2 = p.point
+            var color: Color = p.color
+            draw_arc(point, 5, 0, 2.0 * PI, 8, color)
 
 
 func get_workspace_margin() -> int:
@@ -151,13 +153,13 @@ func update_info_label() -> void:
         distance_sum_factor = precision_distance_sum_curve.sample(distance_sum_pos)
         distance_average_factor = precision_distance_average_curve.sample(distance_average_pos)
 
-    %LabelLengthFactor.text = "%0.3f" % length_factor
-    %LabelCoverageInsideFactor.text = "%0.3f" % coverage_inside_factor
-    %LabelCoverageOutsideFactor.text = "%0.3f" % coverage_outside_factor
-    %LabelDistanceSumFactor.text = "%0.3f" % distance_sum_factor
-    %LabelDistanceAverageFactor.text = "%0.3f" % distance_average_factor
-    %LabelPrecisionMulValue.text = "%0.3f" % [length_factor * coverage_inside_factor * coverage_outside_factor * distance_sum_factor * distance_average_factor]
-    %LabelPrecisionAddValue.text = "%0.3f" % [(length_factor + coverage_inside_factor + coverage_outside_factor + distance_sum_factor + distance_average_factor) / 5.0]
+    (%LabelLengthFactor as Label).text = "%0.3f" % length_factor
+    (%LabelCoverageInsideFactor as Label).text = "%0.3f" % coverage_inside_factor
+    (%LabelCoverageOutsideFactor as Label).text = "%0.3f" % coverage_outside_factor
+    (%LabelDistanceSumFactor as Label).text = "%0.3f" % distance_sum_factor
+    (%LabelDistanceAverageFactor as Label).text = "%0.3f" % distance_average_factor
+    (%LabelPrecisionMulValue as Label).text = "%0.3f" % [length_factor * coverage_inside_factor * coverage_outside_factor * distance_sum_factor * distance_average_factor]
+    (%LabelPrecisionAddValue as Label).text = "%0.3f" % [(length_factor + coverage_inside_factor + coverage_outside_factor + distance_sum_factor + distance_average_factor) / 5.0]
 
 
 func add_debug_line(point: Vector2) -> Line2D:

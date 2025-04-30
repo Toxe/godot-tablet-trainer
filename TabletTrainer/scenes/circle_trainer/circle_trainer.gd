@@ -173,12 +173,12 @@ func update_info_label() -> void:
         distance_sum_factor = precision_distance_sum_curve.sample(distance_sum_pos)
         distance_average_factor = precision_distance_average_curve.sample(distance_average_pos)
 
-    %LabelLengthFactor.text = "%0.3f" % length_factor
-    %LabelCoverageFactor.text = "%0.3f" % coverage_factor
-    %LabelDistanceSumFactor.text = "%0.3f" % distance_sum_factor
-    %LabelDistanceAverageFactor.text = "%0.3f" % distance_average_factor
-    %LabelPrecisionMulValue.text = "%0.3f" % [length_factor * coverage_factor * distance_sum_factor * distance_average_factor]
-    %LabelPrecisionAddValue.text = "%0.3f" % [(length_factor + coverage_factor + distance_sum_factor + distance_average_factor) / 4.0]
+    (%LabelLengthFactor as Label).text = "%0.3f" % length_factor
+    (%LabelCoverageFactor as Label).text = "%0.3f" % coverage_factor
+    (%LabelDistanceSumFactor as Label).text = "%0.3f" % distance_sum_factor
+    (%LabelDistanceAverageFactor as Label).text = "%0.3f" % distance_average_factor
+    (%LabelPrecisionMulValue as Label).text = "%0.3f" % [length_factor * coverage_factor * distance_sum_factor * distance_average_factor]
+    (%LabelPrecisionAddValue as Label).text = "%0.3f" % [(length_factor + coverage_factor + distance_sum_factor + distance_average_factor) / 4.0]
 
 
 func add_debug_line(point: Vector2) -> void:
